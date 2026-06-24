@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lease vs. Purchase | SSG Compass</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #F6F4EF;
+    color: #1C1C1C;
+    min-height: 100vh;
+    padding: 40px 28px 60px;
+  }
+
+  .header { text-align: center; margin-bottom: 36px; }
+  .eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #8A7D6B; margin-bottom: 10px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: #1C1C1C; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .header .meta { font-size: 12px; color: #9B9189; font-weight: 400; }
+  .divider { width: 48px; height: 2px; background: #C5A96A; margin: 14px auto 0; }
+
+  .assumptions { display: flex; flex-wrap: wrap; gap: 6px 20px; background: #1C1C1C; color: #E8E4DC; border-radius: 8px; padding: 13px 20px; font-size: 11.5px; margin-bottom: 28px; justify-content: center; }
+  .assumptions span { opacity: 0.75; }
+  .assumptions strong { opacity: 1; color: #C5A96A; }
+
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+  .column { border-radius: 10px; overflow: hidden; border: 1.5px solid #E0DBD0; background: #fff; }
+
+  .col-header { padding: 16px 22px; display: flex; align-items: center; gap: 12px; }
+  .column.lease .col-header { background: #FFF8EC; border-bottom: 2px solid #C5A96A; }
+  .column.purchase .col-header { background: #EEF5EE; border-bottom: 2px solid #4A8C5C; }
+
+  .col-icon { font-size: 22px; }
+  .col-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; }
+  .column.lease .col-title { color: #7A5C1E; }
+  .column.purchase .col-title { color: #2A5C38; }
+
+  .numbers { padding: 18px 22px; border-bottom: 1px solid #EDEAD5; }
+  .section-label { font-size: 9.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #B0A898; margin-bottom: 12px; }
+
+  .number-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px dashed #EDEAD5; gap: 12px; }
+  .number-row:last-child { border-bottom: none; }
+  .nr-label { font-size: 12px; color: #555; flex: 1; line-height: 1.4; }
+  .nr-value { font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .nr-value.neg { color: #B84040; }
+  .nr-value.pos { color: #2A7A3B; }
+  .nr-value.neutral { color: #1C1C1C; }
+
+  .total-band { background: #1C1C1C; color: #fff; margin: 14px -22px -18px; padding: 11px 22px; display: flex; justify-content: space-between; align-items: center; }
+  .total-band .t-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.8; }
+  .total-band .t-value { font-size: 16px; font-weight: 700; }
+  .column.lease .total-band .t-value { color: #F5C842; }
+  .column.purchase .total-band .t-value { color: #74D68A; }
+
+  .pc-section { padding: 18px 22px 20px; }
+  .pc-block { margin-bottom: 14px; }
+  .pc-block:last-child { margin-bottom: 0; }
+  .pc-head { font-size: 10px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .pc-head.pros { color: #2A7A3B; }
+  .pc-head.cons { color: #B84040; }
+  .pc-list { list-style: none; }
+  .pc-list li { font-size: 12px; color: #3A3A3A; padding: 5px 0 5px 16px; border-bottom: 1px solid #F0ECE4; position: relative; line-height: 1.5; }
+  .pc-list li:last-child { border-bottom: none; }
+  .pc-list li::before { content: ''; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; }
+  .pc-block.pros .pc-list li::before { background: #4A8C5C; }
+  .pc-block.cons .pc-list li::before { background: #C05050; }
+
+  /* EXIT SCENARIOS */
+  .exit-section { background: #fff; border: 1.5px solid #E0DBD0; border-radius: 10px; padding: 22px 26px; margin-bottom: 24px; }
+  .exit-section h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: #1C1C1C; margin-bottom: 6px; }
+  .exit-subtitle { font-size: 11.5px; color: #888; margin-bottom: 18px; }
+  .exit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .exit-card { border-radius: 8px; padding: 16px 18px; border: 1.5px solid #E0DBD0; background: #F9F7F3; }
+  .exit-card .ec-year { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8A7D6B; margin-bottom: 8px; }
+  .exit-card .ec-value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #2A5C38; margin-bottom: 10px; }
+  .exit-card .ec-row { display: flex; justify-content: space-between; font-size: 11px; color: #555; padding: 3px 0; border-bottom: 1px solid #EDEAD5; }
+  .exit-card .ec-row:last-child { border-bottom: none; }
+  .exit-card .ec-row span:last-child { font-weight: 600; color: #1C1C1C; }
+  .exit-card .ec-row span:last-child.pos { color: #2A7A3B; }
+  .exit-card .ec-row span:last-child.neg { color: #B84040; }
+  .exit-note { font-size: 10.5px; color: #999; margin-top: 14px; font-style: italic; }
+
+  /* TAX BENEFITS BANNER */
+  .tax-banner { background: #2A5C38; color: #fff; border-radius: 10px; padding: 22px 26px; margin-bottom: 24px; }
+  .tax-banner h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; margin-bottom: 16px; color: #A8DFB4; }
+  .tax-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tax-item { background: rgba(255,255,255,0.08); border-radius: 7px; padding: 13px 15px; border: 1px solid rgba(255,255,255,0.12); }
+  .tax-item .ti-amount { font-size: 18px; font-weight: 700; color: #A8DFB4; margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+  .tax-item .ti-title { font-size: 11px; font-weight: 600; color: #fff; margin-bottom: 5px; letter-spacing: 0.2px; }
+  .tax-item .ti-desc { font-size: 10.5px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+  .bottom-line { background: #fff; border: 1.5px solid #E0DBD0; border-radius: 10px; padding: 20px 24px; display: flex; gap: 20px; align-items: flex-start; }
+  .bl-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .bl-content h4 { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #1C1C1C; }
+  .bl-content p { font-size: 12px; color: #555; line-height: 1.65; }
+  .bl-content strong { color: #1C1C1C; }
+
+  .footnote { text-align: center; font-size: 10px; color: #B0A898; margin-top: 24px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="eyebrow">The Smiley Sheehan Group &nbsp;·&nbsp; Compass Dallas</div>
+  <h1>Lease vs. Purchase</h1>
+  <p class="meta">12-Month Comparison &nbsp;·&nbsp; $6,795,000 Purchase Price</p>
+  <div class="divider"></div>
+</div>
+
+<!-- ASSUMPTIONS -->
+<div class="assumptions">
+  <span>Purchase Price: <strong>$6,795,000</strong></span>
+  <span>Down (20%): <strong>$1,359,000</strong></span>
+  <span>Loan: <strong>$5,436,000</strong></span>
+  <span>Rate (30-yr Jumbo): <strong>6.63%</strong></span>
+  <span>Monthly P&amp;I: <strong>~$35,210</strong></span>
+  <span>Lease: <strong>$100K/mo × 12 + $200K deposit</strong></span>
+  <span>Property Tax Rate: <strong>1.86% (w/ homestead)</strong></span>
+  <span>HOA: <strong>$4,500/mo ($54,000/yr)</strong></span>
+  <span>Homeowners Insurance: <strong>$6,000/yr</strong></span>
+</div>
+
+<!-- MAIN COMPARISON -->
+<div class="comparison">
+
+  <!-- LEASE COLUMN -->
+  <div class="column lease">
+    <div class="col-header">
+      <span class="col-icon">🔑</span>
+      <span class="col-title">Lease</span>
+    </div>
+
+    <div class="numbers">
+      <div class="section-label">12-Month Numbers</div>
+      <div class="number-row">
+        <span class="nr-label">Total Rent (prepaid, 12 mo.)</span>
+        <span class="nr-value neg">−$1,200,000</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Security Deposit (refundable)</span>
+        <span class="nr-value neutral">$200,000 tied up</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Property Taxes</span>
+        <span class="nr-value neutral">$0</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">HOA / Maintenance</span>
+        <span class="nr-value neutral">Included in rent</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Equity Built</span>
+        <span class="nr-value neg">$0</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Tax Deductions</span>
+        <span class="nr-value neg">$0</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Appreciation Upside</span>
+        <span class="nr-value neg">$0</span>
+      </div>
+      <div class="total-band">
+        <span class="t-label">Capital Lost (unrecoverable)</span>
+        <span class="t-value">$1,200,000</span>
+      </div>
+    </div>
+
+    <div class="pc-section">
+      <div class="pc-block pros">
+        <div class="pc-head pros">✦ Advantages</div>
+        <ul class="pc-list">
+          <li>Preserves $1.36M+ in liquidity</li>
+          <li>Test the property before committing</li>
+          <li>No market value risk during lease</li>
+          <li>Deposit is fully refundable</li>
+          <li>Easy exit or renegotiation at 12 months</li>
+        </ul>
+      </div>
+      <div class="pc-block cons" style="margin-top:14px;">
+        <div class="pc-head cons">✦ Risks &amp; Drawbacks</div>
+        <ul class="pc-list">
+          <li>$1.2M rent is 100% unrecoverable</li>
+          <li>Zero tax benefits</li>
+          <li>No appreciation upside</li>
+          <li>Landlord can sell or decline to renew</li>
+          <li>If he buys after, paid $1.2M to wait — at potentially a higher price</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PURCHASE COLUMN -->
+  <div class="column purchase">
+    <div class="col-header">
+      <span class="col-icon">🏠</span>
+      <span class="col-title">Purchase</span>
+    </div>
+
+    <div class="numbers">
+      <div class="section-label">12-Month Numbers</div>
+      <div class="number-row">
+        <span class="nr-label">Down Payment</span>
+        <span class="nr-value neutral">$1,359,000 (equity)</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Buy-Side Closing Costs (~1.25% of loan)</span>
+        <span class="nr-value neg">~−$67,950</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Annual P&amp;I Payments</span>
+        <span class="nr-value neg">−$422,520</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Property Taxes (1.86%)</span>
+        <span class="nr-value neg">−$126,387</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">HOA ($4,500/mo)</span>
+        <span class="nr-value neg">−$54,000</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Homeowners Insurance</span>
+        <span class="nr-value neg">−$6,000</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Yr 1 Principal Paid (equity)</span>
+        <span class="nr-value pos">+~$68,000</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Est. Appreciation (3% conserv.)</span>
+        <span class="nr-value pos">+~$203,850</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Tax Deductions Available</span>
+        <span class="nr-value pos">Significant ↓</span>
+      </div>
+      <div class="number-row">
+        <span class="nr-label">Sell-Side Closing Costs if sold after Yr 1 (7.5%)</span>
+        <span class="nr-value neg">−$509,625</span>
+      </div>
+      <div class="total-band">
+        <span class="t-label">Net Equity After Year 1 (if sold)</span>
+        <span class="t-value">~$1,053,275</span>
+      </div>
+    </div>
+
+    <div class="pc-section">
+      <div class="pc-block pros">
+        <div class="pc-head pros">✦ Advantages</div>
+        <ul class="pc-list">
+          <li>Builds equity from day one</li>
+          <li>Significant federal tax deductions</li>
+          <li>Full appreciation upside on $6.795M asset</li>
+          <li>Fixed cost — no rent escalation risk</li>
+          <li>Freedom to renovate and customize</li>
+          <li>Asset can be leveraged, sold, or passed on</li>
+        </ul>
+      </div>
+      <div class="pc-block cons" style="margin-top:14px;">
+        <div class="pc-head cons">✦ Risks &amp; Drawbacks</div>
+        <ul class="pc-list">
+          <li>~$1.427M required at closing (down + costs)</li>
+          <li>Responsible for maintenance and HOA</li>
+          <li>Capital is illiquid without refi/HELOC</li>
+          <li>Market value exposure (prices can fall)</li>
+          <li>Jumbo loan underwriting is document-intensive</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT SCENARIOS -->
+<div class="exit-section">
+  <h3>📈 Estimated Figures for Selling</h3>
+  <p class="exit-subtitle">Assumes 3% annual appreciation, 7.5% sell-side closing costs, $67,950 buy-side closing costs already paid at purchase.</p>
+  <div class="exit-grid">
+
+    <div class="exit-card">
+      <div class="ec-year">Sell After Year 1</div>
+      <div class="ec-value">~$1,053,275</div>
+      <div class="ec-row"><span>Sale Price (3% appreciation)</span><span class="pos">$6,998,850</span></div>
+      <div class="ec-row"><span>Sell-Side Closing (7.5%)</span><span class="neg">−$524,914</span></div>
+      <div class="ec-row"><span>Loan Payoff</span><span class="neg">−$5,368,000</span></div>
+      <div class="ec-row"><span>Buy-Side Closing (paid at purchase)</span><span class="neg">−$67,950</span></div>
+      <div class="ec-row"><span>Net Proceeds</span><span class="pos">~$1,038,000</span></div>
+      <div class="ec-row"><span>vs. Leasing (rent lost)</span><span class="neg">−$1,200,000</span></div>
+    </div>
+
+    <div class="exit-card">
+      <div class="ec-year">Sell After Year 3</div>
+      <div class="ec-value">~$1,623,000</div>
+      <div class="ec-row"><span>Sale Price (3%/yr × 3)</span><span class="pos">$7,428,592</span></div>
+      <div class="ec-row"><span>Sell-Side Closing (7.5%)</span><span class="neg">−$557,144</span></div>
+      <div class="ec-row"><span>Loan Payoff (after 3 yrs)</span><span class="neg">−$5,236,000</span></div>
+      <div class="ec-row"><span>Buy-Side Closing (paid at purchase)</span><span class="neg">−$67,950</span></div>
+      <div class="ec-row"><span>Net Proceeds</span><span class="pos">~$1,568,000</span></div>
+    </div>
+
+    <div class="exit-card">
+      <div class="ec-year">Sell After Year 5</div>
+      <div class="ec-value">~$2,225,000</div>
+      <div class="ec-row"><span>Sale Price (3%/yr × 5)</span><span class="pos">$7,878,956</span></div>
+      <div class="ec-row"><span>Sell-Side Closing (7.5%)</span><span class="neg">−$590,922</span></div>
+      <div class="ec-row"><span>Loan Payoff (after 5 yrs)</span><span class="neg">−$5,095,000</span></div>
+      <div class="ec-row"><span>Buy-Side Closing (paid at purchase)</span><span class="neg">−$67,950</span></div>
+      <div class="ec-row"><span>Net Proceeds</span><span class="pos">~$2,125,000</span></div>
+    </div>
+
+  </div>
+  <p class="exit-note">Net equity figures represent gross sale proceeds minus loan payoff and closing costs. Does not account for annual carrying costs (taxes, HOA, insurance, P&I) or tax savings — consult a CPA for a full after-tax analysis.</p>
+</div>
+
+<!-- TAX BENEFITS BANNER -->
+<div class="tax-banner">
+  <h3>💰 Ancillary Benefits of Ownership</h3>
+  <div class="tax-grid">
+    <div class="tax-item">
+      <div class="ti-amount">~$50,000/yr</div>
+      <div class="ti-title">Mortgage Interest Deduction</div>
+      <div class="ti-desc">Yr 1 interest ≈ $357K on $5.436M loan. IRS caps deductibility at $750K acquisition debt — but at the 37% bracket that's still ~$50K in annual federal tax savings on the deductible portion.</div>
+    </div>
+    <div class="tax-item">
+      <div class="ti-amount">$0 on First $250K</div>
+      <div class="ti-title">Capital Gains Exclusion</div>
+      <div class="ti-desc">Primary residence occupied 2 of last 5 years qualifies for up to $250K gain exclusion (single filer) at sale — a meaningful benefit on a high-appreciation luxury asset.</div>
+    </div>
+    <div class="tax-item">
+      <div class="ti-amount">Future Flexibility</div>
+      <div class="ti-title">HELOC / Cash-Out Refi</div>
+      <div class="ti-desc">Equity unlocks borrowing power without a taxable sale. If rates drop in 1–3 years, he can refinance to a lower payment. A renter has no equivalent lever.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM LINE -->
+<div class="bottom-line">
+  <span class="bl-icon">⚖️</span>
+  <div class="bl-content">
+    <h4>The Bottom Line: If He Plans to Buy Anyway</h4>
+    <p>Leasing first costs <strong>$1,200,000 in unrecoverable rent</strong> — roughly 18% of the purchase price — just to defer the decision. During that same year as an owner, he would build meaningful equity, earn appreciation on a $6.795M asset, and access six-figure tax deductions. The lease makes sense only if there is real uncertainty about the property itself or a specific reason to preserve liquidity.</p>
+  </div>
+</div>
+
+<p class="footnote">
+  Monthly P&amp;I calculated at 6.63% on $5,436,000 / 30 years. Property tax at 1.86% with homestead exemption applied. HOA at $4,500/month ($54,000/year). Homeowners insurance at $6,000/year. Buy-side closing costs estimated at ~1.25% of loan amount. Sell-side closing costs at 7.5% of sale price.
+  Appreciation modeled at 3% annually (compounded). Loan payoff estimates are approximate. Mortgage interest deduction subject to $750K acquisition debt cap per current IRS rules.
+  Tax analysis is illustrative — client should consult a CPA. Rates per Bankrate / Mortgage News Daily, June 24, 2026.
+</p>
+
+</body>
+</html>
